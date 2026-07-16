@@ -1,0 +1,16 @@
+{
+	"name" : String, 
+	"id": Long,
+	"professor" : String, 
+	// exercises, todo, experiments, etc. 
+	"tasks": [
+		{
+			"id" : Long,
+			"deadline" : DateTime, 
+			"done" : boolean
+		}
+	], 
+	"requirements" : String, 
+	"examination_id" : Long, 
+	"overall_grade" : Double
+}
