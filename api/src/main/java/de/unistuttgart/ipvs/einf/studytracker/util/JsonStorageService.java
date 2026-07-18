@@ -50,7 +50,7 @@ public class JsonStorageService {
             return new ArrayList<>();
         }
         try {
-            return mapper.readValue(file, new TypeReference<List<Module>>() {});
+            return mapper.readValue(file, new TypeReference<>() {});
         } catch (JacksonException e) {
             System.err.println("Error while reading JSON: " + e.getMessage());
             return null;
