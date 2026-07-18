@@ -2,8 +2,8 @@ package de.unistuttgart.ipvs.einf.studytracker.accessment;
 
 import de.unistuttgart.ipvs.einf.studytracker.module.Module;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class FinalExam {
@@ -12,17 +12,15 @@ public class FinalExam {
 
     private Module module;
 
-    private LocalDate date;
-    private LocalTime startingTime;
-    private Integer duration;
+    private LocalDateTime startingTime;
+    private Duration duration;
 
     private String allowedTools;
 
-    public FinalExam(Long id, Module module, LocalDate date, LocalTime startingTime,
-                     Integer duration, String allowedTools) {
+    public FinalExam(Long id, Module module, LocalDateTime startingTime,
+                     Duration duration, String allowedTools) {
         this.id = id;
         this.module = module;
-        this.date = date;
         this.startingTime = startingTime;
         this.duration = duration;
         this.allowedTools = allowedTools;
@@ -56,24 +54,17 @@ public class FinalExam {
         this.module = module;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalTime getStartingTime() {
+    public LocalDateTime getStartingTime() {
         return startingTime;
     }
-    public void setStartingTime(LocalTime startingTime) {
+    public void setStartingTime(LocalDateTime startingTime) {
         this.startingTime = startingTime;
     }
 
-    public Integer getDuration() {
+    public Duration getDuration() {
         return duration;
     }
-    public void setDuration(Integer duration) {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
 

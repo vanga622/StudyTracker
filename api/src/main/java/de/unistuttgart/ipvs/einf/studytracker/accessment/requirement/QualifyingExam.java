@@ -1,15 +1,15 @@
 package de.unistuttgart.ipvs.einf.studytracker.accessment.requirement;
 
 import de.unistuttgart.ipvs.einf.studytracker.module.Module;
-import java.time.LocalDate;
-import java.time.LocalTime;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 /** Scheinklausur */
 public record QualifyingExam(
         Module module,
         boolean fulfilled,
-        LocalDate date,
-        LocalTime time,
-        Integer duration
+        LocalDateTime startingTime,
+        Duration duration
         ) implements Requirement {
 }
