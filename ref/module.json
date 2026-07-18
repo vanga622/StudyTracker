@@ -1,16 +1,44 @@
 {
-	"name" : String, 
 	"id": Long,
+	"name" : String, 
+	"description" : String,
 	"professor" : String, 
-	// exercises, todo, experiments, etc. 
-	"tasks": [
+	"credits" : int, 
+    "weeklyHours" : int, 
+    "availableSemester" : ["WINTER_SEMESTER", "SUMMER_SEMESTER"]
+    "status" : "AVAILABLE" // IN_PROGRESS, COMPLETED, FAILED
+	"requirements": [
 		{
-			"id" : Long,
-			"deadline" : DateTime, 
-			"done" : boolean
+			"type" : "tutorial",
+			"module" : module.id,
+			"fulfilled" : boolean, 
+			"deadline" : LocalDateTime, 
+			"worksheets" : [
+				{
+					"id" : Long, 
+					"description" : String,
+					"deadline" : LocalDateTime, 
+					"done" : boolean, 
+					"passed" : boolean
+				}
+			]
+		}, 
+		{
+			"type" : "qualifyingExam", 
+			"module" : module.id,
+			"fulfilled" : boolean, 
+			"startingTime" : LocalDateTime, 
+			"duration" : Duration
 		}
 	], 
-	"requirements" : String, 
-	"examination_id" : Long, 
-	"overall_grade" : Double
+	"eligibleToExam" : boolean, 
+    "finalExam" : {
+			"id" : Long, 
+			"module" : module.id,
+			"startingTime" : LocalDateTime, 
+			"duration" : Duration, 
+			"allowedTools" : String
+		}
+    "attempts" : 0,
+    "finalGrade" : null
 }
