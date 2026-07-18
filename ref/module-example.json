@@ -1,0 +1,43 @@
+{
+	"id": 1,
+	"name" : "Quantum Physics II", 
+	"description" : "Is the cat alive?",
+	"professor" : "Dr Max Mustermann", 
+	"credits" : 9, 
+    "weeklyHours" : 6, 
+    "availableSemester" : ["WINTER_SEMESTER", "SUMMER_SEMESTER"]
+    "status" : "AVAILABLE" // IN_PROGRESS, COMPLETED, FAILED
+	"requirements": [
+		{
+			"type" : "tutorial",
+			"module" : 1,
+			"fulfilled" : false, 
+			"worksheets" : [
+				{
+					"id" : 1, 
+					"description" : "Speed of Light",
+					"deadline" : "2026-07-18T23:59:59", 
+					"done" : false, 
+					"passed" : false
+				}, // ...
+			]
+		}, 
+		{
+			"type" : "qualifyingExam", 
+			"module" : 1,
+			"fulfilled" : false, 
+			"startingTime" : "2026-07-28T23:59:59", 
+			"duration" : "PT1H30M" // 90 minutes
+		}, // ...
+	], 
+	"eligibleToExam" : false, 
+    "finalExam" : {
+			"id" : 1, 
+			"module" : 1,
+			"startingTime" : "2026-08-28T23:59:59", 
+			"duration" : "PT1H30M", // 90 minutes
+			"allowedTools" : "none"
+		}
+    "attempts" : 0,
+    "finalGrade" : null
+}

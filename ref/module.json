@@ -12,7 +12,6 @@
 			"type" : "tutorial",
 			"module" : module.id,
 			"fulfilled" : boolean, 
-			"deadline" : LocalDateTime, 
 			"worksheets" : [
 				{
 					"id" : Long, 
