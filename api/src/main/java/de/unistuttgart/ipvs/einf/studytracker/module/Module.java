@@ -20,6 +20,7 @@ public class Module {
 
     private String name;
     private String description;
+    private String professor;
 
     private int credits;
     private int weeklyHours;
@@ -78,6 +79,13 @@ public class Module {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getProfessor() {
+        return professor;
+    }
+    public void setProfessor(String professor) {
+        this.professor = professor;
     }
 
     public int getCredits() {
