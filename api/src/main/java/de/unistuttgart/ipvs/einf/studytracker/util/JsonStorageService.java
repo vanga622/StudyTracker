@@ -11,8 +11,8 @@ import de.unistuttgart.ipvs.einf.studytracker.module.Module;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JsonStorageService {
 
@@ -35,7 +35,7 @@ public class JsonStorageService {
         this.storagePath = storagePath;
     }
 
-    public void writeModules(List<Module> modules) {
+    public void writeModules(Map<Long, Module> modules) {
         File file = storagePath.toFile();
         try {
             // create new file if it doesn't exist yet
@@ -45,10 +45,10 @@ public class JsonStorageService {
         }
     }
 
-    public List<Module> readModules() {
+    public Map<Long, Module> readModules() {
         File file = storagePath.toFile();
         if (!file.exists()) {
-            return new ArrayList<>();
+            return new HashMap<>();
         }
         try {
             return mapper.readValue(file, new TypeReference<>() {});
