@@ -1,5 +1,7 @@
-package de.unistuttgart.ipvs.einf.studytracker.accessment;
+package de.unistuttgart.ipvs.einf.studytracker.assessment;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.unistuttgart.ipvs.einf.studytracker.module.Module;
 
 import java.time.Duration;
@@ -17,8 +19,12 @@ public class FinalExam {
 
     private String allowedTools;
 
-    public FinalExam(Long id, Module module, LocalDateTime startingTime,
-                     Duration duration, String allowedTools) {
+    @JsonCreator
+    public FinalExam(@JsonProperty("id") Long id,
+                     @JsonProperty("module") Module module,
+                     @JsonProperty("startingTime") LocalDateTime startingTime,
+                     @JsonProperty("duration") Duration duration,
+                     @JsonProperty("allowedTools") String allowedTools) {
         this.id = id;
         this.module = module;
         this.startingTime = startingTime;

@@ -1,4 +1,4 @@
-package de.unistuttgart.ipvs.einf.studytracker.accessment.requirement;
+package de.unistuttgart.ipvs.einf.studytracker.assessment.requirement;
 
 import de.unistuttgart.ipvs.einf.studytracker.module.Module;
 import java.util.List;

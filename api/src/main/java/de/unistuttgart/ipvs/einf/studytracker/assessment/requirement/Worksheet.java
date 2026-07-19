@@ -1,4 +1,7 @@
-package de.unistuttgart.ipvs.einf.studytracker.accessment.requirement;
+package de.unistuttgart.ipvs.einf.studytracker.assessment.requirement;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -12,7 +15,10 @@ public class Worksheet {
     private boolean done;
     private boolean passed;
 
-    public Worksheet(Long id, String description, LocalDateTime deadline) {
+    @JsonCreator
+    public Worksheet(@JsonProperty("id") Long id,
+                     @JsonProperty("description") String description,
+                     @JsonProperty("deadline") LocalDateTime deadline) {
         this.id = id;
         this.description = description;
         this.deadline = deadline;
