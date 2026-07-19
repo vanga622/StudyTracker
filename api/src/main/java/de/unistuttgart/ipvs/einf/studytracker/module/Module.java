@@ -1,9 +1,7 @@
 package de.unistuttgart.ipvs.einf.studytracker.module;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import de.unistuttgart.ipvs.einf.studytracker.assessment.FinalExam;
 import de.unistuttgart.ipvs.einf.studytracker.assessment.requirement.Requirement;
 
@@ -12,10 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
 public class Module {
 
     private final Long id;

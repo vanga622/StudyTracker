@@ -1,6 +1,5 @@
 package de.unistuttgart.ipvs.einf.studytracker.assessment.requirement;
 
-import de.unistuttgart.ipvs.einf.studytracker.module.Module;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -13,6 +12,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = Tutorial.class, name = "tutorial")
 })
 public sealed interface Requirement permits QualifyingExam, Tutorial {
-    Module module();
     boolean fulfilled();
 }

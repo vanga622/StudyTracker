@@ -6,6 +6,7 @@ import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
+import de.unistuttgart.ipvs.einf.studytracker.module.Module;
 
 import java.io.File;
 import java.nio.file.Path;
