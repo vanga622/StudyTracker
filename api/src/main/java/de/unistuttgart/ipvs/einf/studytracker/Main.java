@@ -20,7 +20,12 @@ public class Main {
         long randomId = ThreadLocalRandom.current().nextLong(10_000, 100_000);
 
         Module module = moduleService.createModule(
-                randomId,"Quantum Physics I", "Finding out if the cat is alive", 9, 6, Set.of(SemesterRotation.WINTER_SEMESTER));
+                randomId,
+                "Quantum Physics I",
+                "Finding out if the cat is alive",
+                9,
+                6,
+                Set.of(SemesterRotation.WINTER_SEMESTER));
         System.out.println("Created module: " + module.getId() + " " + module.getName());
 
         moduleService.addRequirement(module.getId(), new Tutorial("Group A", false, new ArrayList<>()));
