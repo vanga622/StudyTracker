@@ -2,6 +2,7 @@ package de.unistuttgart.ipvs.einf.studytracker;
 
 import de.unistuttgart.ipvs.einf.studytracker.module.Module;
 import de.unistuttgart.ipvs.einf.studytracker.assessment.requirement.Tutorial;
+import de.unistuttgart.ipvs.einf.studytracker.module.ModuleRepository;
 import de.unistuttgart.ipvs.einf.studytracker.module.ModuleService;
 import de.unistuttgart.ipvs.einf.studytracker.module.SemesterRotation;
 import de.unistuttgart.ipvs.einf.studytracker.util.JsonStorageService;
@@ -15,7 +16,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Main {
     static void main() {
         JsonStorageService storage = new JsonStorageService();
-        ModuleService moduleService = new ModuleService(storage);
+        ModuleRepository moduleRepository = new ModuleRepository(storage);
+        ModuleService moduleService = new ModuleService(moduleRepository);
 
         long randomId = ThreadLocalRandom.current().nextLong(10_000, 100_000);
 

@@ -29,7 +29,7 @@ public class ModuleRepository {
         Map<Long, Module> modules = jsonStorageService.readModules();
         modules.put(module.getId(), module);
         jsonStorageService.writeModules(modules);
-        log.info("Module with id {} saved", module.getId());
+        log.info("Module saved");
     }
 
     public void save(Map<Long, Module> modules) {
