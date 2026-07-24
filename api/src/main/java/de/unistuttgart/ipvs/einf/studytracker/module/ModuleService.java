@@ -5,13 +5,17 @@ import de.unistuttgart.ipvs.einf.studytracker.assessment.requirement.QualifyingE
 import de.unistuttgart.ipvs.einf.studytracker.assessment.requirement.Requirement;
 import de.unistuttgart.ipvs.einf.studytracker.assessment.requirement.Tutorial;
 import de.unistuttgart.ipvs.einf.studytracker.assessment.requirement.Worksheet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class ModuleService {
-    
+
+    private final static Logger log = LoggerFactory.getLogger(ModuleService.class);
+
     private final ModuleRepository moduleRepository;
 
     public ModuleService(ModuleRepository moduleRepository) {
@@ -42,12 +46,14 @@ public class ModuleService {
             throw new IllegalStateException("Module id does not match");
         }
         moduleRepository.save(module);
+        log.info("Module with id {} updated", moduleId);
     }
 
     public void removeModule(Long moduleId) {
         Map<Long, Module> modules = moduleRepository.getModules();
         modules.remove(moduleId);
         moduleRepository.save(modules);
+        log.info("Module with id {} removed", moduleId);
     }
 
     // -- Final Exam Management --
@@ -86,18 +92,21 @@ public class ModuleService {
         Module module = moduleRepository.find(moduleId);
         module.setFinalExam(exam);
         moduleRepository.save(module);
+        log.info("Module with id {} updated final exam {}", moduleId, exam.getId());
     }
 
     public void removeFinalExam(Long moduleId) {
         Module module = moduleRepository.find(moduleId);
         module.setFinalExam(null);
         moduleRepository.save(module);
+        log.info("Final exam of module with id {} removed", moduleId);
     }
 
     public void setFinalGrade(Long moduleId, Double grade) {
         Module module = moduleRepository.find(moduleId);
         module.setFinalGrade(grade);
         moduleRepository.save(module);
+        log.info("Module with id {} updated grade {}", moduleId, grade);
     }
 
     // -- Object Management in Modules --
@@ -106,6 +115,7 @@ public class ModuleService {
         Module module = moduleRepository.find(moduleId);
         module.getRequirements().add(req);
         moduleRepository.save(module);
+        log.info("Module with id {} updated requirement", moduleId);
     }
 
     public void removeQualifyingExam(Long moduleId) {
@@ -115,6 +125,7 @@ public class ModuleService {
 
         if (removed) {
             moduleRepository.save(module);
+            log.info("Module with id {} updated qualifying exam", moduleId);
         }
     }
 
@@ -125,6 +136,7 @@ public class ModuleService {
 
         if (removed) {
             moduleRepository.save(module);
+            log.info("Module with id {} updated tutorial", moduleId);
         }
     }
 
@@ -139,6 +151,7 @@ public class ModuleService {
         Worksheet ws = new Worksheet(id, description, deadline);
         tutorial.worksheets().add(ws);
         moduleRepository.save(module);
+        log.info("Module with id {} added worksheet {}", moduleId, id);
     }
 
     public void addWorksheetWithId(Long moduleId, String tutorialName,
@@ -154,6 +167,7 @@ public class ModuleService {
         Worksheet ws = new Worksheet(id, description, deadline);
         tutorial.worksheets().add(ws);
         moduleRepository.save(module);
+        log.info("Module with id {} added worksheet {}", moduleId, id);
     }
 
     public void setWorksheetCompletion(Long moduleId, String tutorialName, Long worksheetId, boolean completed) {
@@ -163,6 +177,7 @@ public class ModuleService {
 
         ws.setDone(completed);
         moduleRepository.save(module);
+        log.info("Module {} with worksheet {} is {}", moduleId, worksheetId, completed ? "completed" : "not done");
     }
 
     public void setWorksheetStatus(Long moduleId, String tutorialName, Long worksheetId, boolean passed) {
@@ -172,6 +187,7 @@ public class ModuleService {
 
         ws.setPassed(passed);
         moduleRepository.save(module);
+        log.info("Module {} with worksheet {} is {}", moduleId, worksheetId, passed ? "passed" : "not passed");
     }
 
     private static Worksheet getWorksheetOrElseThrow(String tutorialName, Long worksheetId, Module module) {
