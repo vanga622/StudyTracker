@@ -2,8 +2,8 @@ package de.unistuttgart.ipvs.einf.studytracker.module;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.unistuttgart.ipvs.einf.studytracker.assessment.FinalExam;
-import de.unistuttgart.ipvs.einf.studytracker.assessment.requirement.Requirement;
+import de.unistuttgart.ipvs.einf.studytracker.module.assessment.FinalExam;
+import de.unistuttgart.ipvs.einf.studytracker.module.assessment.requirement.Requirement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +36,14 @@ public class Module {
     public Module(@JsonProperty("id") Long id,
                   @JsonProperty("name") String name,
                   @JsonProperty("description") String description,
+                  @JsonProperty("professor") String professor,
                   @JsonProperty("credits") int credits,
                   @JsonProperty("weeklyHours") int weeklyHours,
                   @JsonProperty("availableSemester") Set<SemesterRotation> availableSemester) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.professor = professor;
         this.credits = credits;
         this.weeklyHours = weeklyHours;
         this.availableSemester = availableSemester;

@@ -9,6 +9,8 @@ import tools.jackson.databind.json.JsonMapper;
 import de.unistuttgart.ipvs.einf.studytracker.module.Module;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -56,5 +58,9 @@ public class JsonStorageService {
             System.err.println("Error while reading JSON: " + e.getMessage());
             return null;
         }
+    }
+
+    public String printModules() throws IOException {
+        return Files.readString(storagePath);
     }
 }

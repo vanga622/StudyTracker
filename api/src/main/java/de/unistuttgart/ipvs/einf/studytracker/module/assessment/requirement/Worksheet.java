@@ -1,4 +1,4 @@
-package de.unistuttgart.ipvs.einf.studytracker.assessment.requirement;
+package de.unistuttgart.ipvs.einf.studytracker.module.assessment.requirement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,10 +1,10 @@
 package de.unistuttgart.ipvs.einf.studytracker.module;
 
-import de.unistuttgart.ipvs.einf.studytracker.assessment.FinalExam;
-import de.unistuttgart.ipvs.einf.studytracker.assessment.requirement.QualifyingExam;
-import de.unistuttgart.ipvs.einf.studytracker.assessment.requirement.Requirement;
-import de.unistuttgart.ipvs.einf.studytracker.assessment.requirement.Tutorial;
-import de.unistuttgart.ipvs.einf.studytracker.assessment.requirement.Worksheet;
+import de.unistuttgart.ipvs.einf.studytracker.module.assessment.FinalExam;
+import de.unistuttgart.ipvs.einf.studytracker.module.assessment.requirement.QualifyingExam;
+import de.unistuttgart.ipvs.einf.studytracker.module.assessment.requirement.Requirement;
+import de.unistuttgart.ipvs.einf.studytracker.module.assessment.requirement.Tutorial;
+import de.unistuttgart.ipvs.einf.studytracker.module.assessment.requirement.Worksheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +27,7 @@ public class ModuleService {
     public Module createModule(Long id,
                                String name,
                                String description,
+                               String professor,
                                int credits,
                                int weeklyHours,
                                Set<SemesterRotation> availableSemester) {
@@ -34,10 +35,18 @@ public class ModuleService {
         if (modules.containsKey(id)) {
             throw new IllegalStateException("Module with id " + id + " already exists");
         }
-        Module module = new Module(id, name, description, credits, weeklyHours, availableSemester);
+        Module module = new Module(id, name, description, professor, credits, weeklyHours, availableSemester);
         modules.put(id, module);
         moduleRepository.save(modules);
         return module;
+    }
+
+    public Module getModule(Long id) {
+        return moduleRepository.find(id);
+    }
+
+    public List<Module> getAllModules() {
+        return new ArrayList<>(moduleRepository.getModules().values());
     }
 
     public void updateModule(Long moduleId, Module module) {
@@ -54,6 +63,12 @@ public class ModuleService {
         modules.remove(moduleId);
         moduleRepository.save(modules);
         log.info("Module with id {} removed", moduleId);
+    }
+
+    public void setModuleStatus(Long moduleId, ModuleStatus moduleStatus) {
+        Module module = moduleRepository.find(moduleId);
+        module.setStatus(moduleStatus);
+        moduleRepository.save(module);
     }
 
     // -- Final Exam Management --
@@ -118,6 +133,34 @@ public class ModuleService {
         log.info("Module with id {} updated requirement", moduleId);
     }
 
+    public void setRequirementStatus(Long moduleId, Requirement req, boolean status) {
+        Module module = moduleRepository.find(moduleId);
+        if (req instanceof QualifyingExam) {
+            module.getRequirements().stream()
+                    .filter(QualifyingExam.class::isInstance)
+                    .map(QualifyingExam.class::cast)
+                    .findFirst()
+                    .ifPresent(exam -> exam.setFulfilled(status));
+        } else if (req instanceof Tutorial t) {
+            module.getRequirements().stream()
+                    .filter(Tutorial.class::isInstance)
+                    .map(Tutorial.class::cast)
+                    .filter(other -> other.name().equals(t.name()))
+                    .findFirst()
+                    .ifPresent(tutorial -> tutorial.setFulfilled(status));
+        }
+        moduleRepository.save(module);
+        log.info("Module with id {} requirement fulfilled = {}", moduleId, status);
+    }
+
+    public void removeRequirement(Long moduleId, Requirement req) {
+        if (req instanceof QualifyingExam) {
+            removeQualifyingExam(moduleId);
+        } else if (req instanceof Tutorial t) {
+            removeTutorial(moduleId, t.name());
+        }
+    }
+
     public void removeQualifyingExam(Long moduleId) {
         Module module = moduleRepository.find(moduleId);
         boolean removed = module.getRequirements()
@@ -138,6 +181,19 @@ public class ModuleService {
             moduleRepository.save(module);
             log.info("Module with id {} updated tutorial", moduleId);
         }
+    }
+
+    private static Tutorial getTutorial(String tutorialName, Module module) {
+        return module.getRequirements().stream()
+                .filter(Tutorial.class::isInstance)
+                .map(Tutorial.class::cast)
+                .filter(t -> t.name().equals(tutorialName))
+                .findFirst()
+                .orElseGet(() -> {
+                    Tutorial newTutorial = new Tutorial(tutorialName, false, new ArrayList<>());
+                    module.getRequirements().add(newTutorial);
+                    return newTutorial;
+                });
     }
 
     // -- Worksheets --
@@ -190,7 +246,28 @@ public class ModuleService {
         log.info("Module {} with worksheet {} is {}", moduleId, worksheetId, passed ? "passed" : "not passed");
     }
 
-    private static Worksheet getWorksheetOrElseThrow(String tutorialName, Long worksheetId, Module module) {
+    public void removeWorksheet(Long moduleId, String tutorialName, Long worksheetId) {
+        Module module = moduleRepository.find(moduleId);
+        Tutorial tutorial = getTutorial(tutorialName, module);
+        boolean removed = tutorial.worksheets().removeIf(ws -> ws.getId().equals(worksheetId));
+        if (!removed) {
+            throw new IllegalStateException("Worksheet with id " + worksheetId + " not found");
+        }
+        moduleRepository.save(module);
+        log.info("Module with id {} removed worksheet {}", moduleId, worksheetId);
+    }
+
+    public void updateWorksheet(Long moduleId, String tutorialName, Long worksheetId,
+                                String description, LocalDateTime deadline) {
+        Module module = moduleRepository.find(moduleId);
+        Worksheet ws = getWorksheetOrElseThrow(tutorialName, worksheetId, module);
+        ws.setDescription(description);
+        ws.setDeadline(deadline);
+        moduleRepository.save(module);
+        log.info("Module with id {} updated worksheet {}", moduleId, worksheetId);
+    }
+
+    public Worksheet getWorksheetOrElseThrow(String tutorialName, Long worksheetId, Module module) {
         Tutorial tutorial = module.getRequirements().stream()
                 .filter(Tutorial.class::isInstance)
                 .map(Tutorial.class::cast)
@@ -204,24 +281,15 @@ public class ModuleService {
                 .orElseThrow(() -> new IllegalStateException("Worksheet with id " + worksheetId + " not found"));
     }
 
-    private static Tutorial getTutorial(String tutorialName, Module module) {
-        return module.getRequirements().stream()
-                .filter(Tutorial.class::isInstance)
-                .map(Tutorial.class::cast)
-                .filter(t -> t.name().equals(tutorialName))
-                .findFirst()
-                .orElseGet(() -> {
-                    Tutorial newTutorial = new Tutorial(tutorialName, false, new ArrayList<>());
-                    module.getRequirements().add(newTutorial);
-                    return newTutorial;
-                });
-    }
-
     private static Long nextWorksheetId(List<Worksheet> worksheets) {
         return worksheets.stream()
                 .map(Worksheet::getId)
                 .max(Comparator.naturalOrder())
                 .map(id -> id + 1)
                 .orElse(1L);
+    }
+
+    public boolean exists(Long id) {
+        return moduleRepository.getModules().containsKey(id);
     }
 }
